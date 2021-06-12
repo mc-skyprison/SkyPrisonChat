@@ -65,6 +65,10 @@
             <id>Scarsz-Nexus</id>
             <url>https://nexus.scarsz.me/content/groups/public/</url>
         </repository>
+        <repository>
+            <id>a5h73y-repo</id>
+            <url>https://dl.bintray.com/a5h73y/repo/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -83,6 +87,13 @@
             <groupId>net.pl3x.purpur</groupId>
             <artifactId>purpur-api</artifactId>
             <version>1.16.5-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.github.a5h73y</groupId>
+            <artifactId>Parkour</artifactId>
+            <version>6.3</version>
+            <type>jar</type>
             <scope>provided</scope>
         </dependency>
         <dependency>

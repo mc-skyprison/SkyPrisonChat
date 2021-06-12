@@ -17,11 +17,11 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.io.File;
 import java.util.List;
 
-public class Discord {
+public class DiscordUtil {
 	private SkyPrisonChat plugin;
 
 	@Inject
-	public Discord(SkyPrisonChat plugin) {
+	public DiscordUtil(SkyPrisonChat plugin) {
 		this.plugin = plugin;
 	}
 

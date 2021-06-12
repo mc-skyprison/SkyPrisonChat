@@ -4,6 +4,7 @@ description: Anything regarding private chats
 version: ${project.version}
 main: net.skyprison.skyprisonchat.SkyPrisonChat
 api-version: 1.16
+softdepend: [McMMO, Parkour]
 depend: [DiscordSRV]
 commands:
   g:
@@ -32,4 +33,13 @@ commands:
     permission: skyprisoncore.command.discord
     permission-message: §4Error:§c You do not have permission to execute this command...
 permissions:
-
+  skyprisoncore.command.build:
+    description: Gives access to buildchat
+  skyprisoncore.command.guard:
+    description: Gives access to guardchat
+  skyprisoncore.command.admin:
+    description: Gives access to adminchat
+  skyprisoncore.command.discord:
+    description: Gives access to discordchat
+  skyprisoncore.command.staff:
+    description: Gives access to staffchat

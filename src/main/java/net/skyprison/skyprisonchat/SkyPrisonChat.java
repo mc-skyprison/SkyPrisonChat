@@ -1,12 +1,19 @@
 package net.skyprison.skyprisonchat;
 
+import com.gmail.nossr50.datatypes.player.McMMOPlayer;
+import com.gmail.nossr50.events.chat.McMMOPartyChatEvent;
+import com.gmail.nossr50.events.experience.McMMOPlayerLevelUpEvent;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
+import github.scarsz.discordsrv.DiscordSRV;
 import github.scarsz.discordsrv.dependencies.jda.api.entities.TextChannel;
+import io.github.a5h73y.parkour.event.PlayerFinishCourseEvent;
+import io.github.a5h73y.parkour.type.course.CourseInfo;
+import io.github.a5h73y.parkour.type.player.PlayerInfo;
 import net.skyprison.skyprisonchat.commands.*;
+import net.skyprison.skyprisonchat.utils.DiscordUtil;
 import net.skyprison.skyprisonchat.utils.LangCreator;
 import net.skyprison.skyprisonchat.utils.PluginReceiver;
-import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -19,9 +26,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.text.DecimalFormat;
-import java.util.HashMap;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -39,7 +44,7 @@ public final class SkyPrisonChat extends JavaPlugin implements Listener {
 
 	@Inject private LangCreator LangCreator;
 
-	private final Discord discordListener = new Discord(this);
+	private final DiscordUtil discordListener = new DiscordUtil(this);
 
 	@Override
 	public void onEnable() {
@@ -141,5 +146,47 @@ public final class SkyPrisonChat extends JavaPlugin implements Listener {
 			TextChannel channel = github.scarsz.discordsrv.DiscordSRV.getPlugin().getDestinationTextChannelForGameChannelName(split[0] + "-chat");
 			channel.sendMessage(dMessage).queue();
 		}
+	}
+
+	@EventHandler
+	public void onMcMMOLevelUp(McMMOPlayerLevelUpEvent event) {
+		McMMOPlayer mcPlayer = com.gmail.nossr50.util.player.UserManager.getPlayer(event.getPlayer());
+		if(mcPlayer.getPowerLevel() == 250) {
+			asConsole("lp user " + event.getPlayer().getName() + " permission set deluxetags.tag.powerlevel1");
+		} else if(mcPlayer.getPowerLevel() == 500) {
+			asConsole("lp user " + event.getPlayer().getName() + " permission set deluxetags.tag.powerlevel2");
+		} else if(mcPlayer.getPowerLevel() == 750) {
+			asConsole("lp user " + event.getPlayer().getName() + " permission set deluxetags.tag.powerlevel3");
+		} else if(mcPlayer.getPowerLevel() == 1000) {
+			asConsole("lp user " + event.getPlayer().getName() + " permission set deluxetags.tag.powerlevel4");
+		} else if(mcPlayer.getPowerLevel() == 1500) {
+			asConsole("lp user " + event.getPlayer().getName() + " permission set deluxetags.tag.powerlevel5");
+		} else if(mcPlayer.getPowerLevel() == 2000) {
+			asConsole("lp user " + event.getPlayer().getName() + " permission set deluxetags.tag.powerlevel6");
+		}
+		if(event.getSkillLevel() == 100) {
+			asConsole("lp user " + event.getPlayer().getName() + " permission set deluxetags.tag." + event.getSkill().getName());
+		} else if(event.getSkillLevel() == 200) {
+			asConsole("lp user " + event.getPlayer().getName() + " permission set deluxetags.tag." + event.getSkill().getName() + "2");
+		}
+	}
+
+	@EventHandler
+	public void onCourseCompletion(PlayerFinishCourseEvent event) {
+		Player player = event.getPlayer();
+		List<String> completedCourses = PlayerInfo.getCompletedCourses(player);
+		List<String> allCourses = CourseInfo.getAllCourseNames();
+		Collections.sort(allCourses);
+		Collections.sort(completedCourses);
+		if(completedCourses.equals(allCourses)) {
+			asConsole("lp user " + player.getName() + " permission set deluxetags.tag.Parkourist");
+		}
+	}
+
+	@EventHandler
+	public void McMMOPartyChat(McMMOPartyChatEvent event) {
+		TextChannel channel = DiscordSRV.getPlugin().getDestinationTextChannelForGameChannelName("party-chats");
+		channel.sendMessage("(**" + event.getAuthorParty().getName() + "**) "
+				+ Objects.requireNonNull(Bukkit.getPlayer(event.getPartyChatMessage().getAuthor().uuid())).getName() + " » " + event.getRawMessage()).queue();
 	}
 }
